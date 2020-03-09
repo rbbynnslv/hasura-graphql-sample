@@ -1,0 +1,21 @@
+version: '3.3'
+services:
+  postgres:
+    image: postgres
+    restart: always
+    volumes:
+      - sample_db:/var/lib/postgresql/data
+  graphql-engine:
+    image: hasura/graphql-engine:latest
+    ports:
+      - '8080:8080'
+    depends_on:
+      - 'postgres'
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:sample_db@postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: 'true' # set to "false" to disable console
+      HASURA_GRAPHQL_ADMIN_SECRET: admin   ## uncomment next line to set an admin secret
+      HASURA_GRAPHQL_JWT_SECRET: '{"type": "RS512", "key": "-----BEGIN CERTIFICATE-----\nMIIDCTCCAfGgAwIBAgIJAd4MAjxJzcyAMA0GCSqGSIb3DQEBCwUAMCIxIDAeBgNV\nBAMTF2Rldi1yYmJ5bm5zbHYuYXV0aDAuY29tMB4XDTIwMDEzMTA1MDU1MFoXDTMz\nMTAwOTA1MDU1MFowIjEgMB4GA1UEAxMXZGV2LXJiYnlubnNsdi5hdXRoMC5jb20w\nggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDTLIWdul14inL6hSNjzAJ/\nXa8szdYGBL0cCliY1QC1UzlGpswOFjC4ZxBOkF/vaOCzIDBIfEyo7g7a5baGxGrO\nslZlURGIcROnc0+ZjliTNPLCsIGWDhr6bsMFmSrpTAfE5wHPtDtHtoA7O20bcvBE\nZ2z7sa7ZJDz9qMW3Lay9hbRRq2iEzfJ3w0VfwiVWYjhBzXXvq+r7JRKP8p8J1FJI\ncrvJKilyIXGVasxyqNekdylbyGiEAAinjNCTFHhhmx69h5hJ2eJFrkQbiKbFmOcg\ng0PoJ/3aWsn+LPK4bvDxSnx1i+2VPFsUWWgZVaHeZeCG5+Gw0lLnVXGjjv36r9rb\nAgMBAAGjQjBAMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFCjq5yFqNikwChse\nW6AmS8frUTcJMA4GA1UdDwEB/wQEAwIChDANBgkqhkiG9w0BAQsFAAOCAQEACO/y\nFM/Hi68GxuIYTgvDOWCnOZvIL/EI6arVURRVJAsJD+Ymj3m2gdrwx75rcBEJSDNc\n9GkMq90CarHJK4RQSMhnFs4LAxJrifo39Zv/xtg7j8bsOVmGToS82M/4myplmdV2\ntv8ygkfbnEHYHmB/99Ogyr3mNfp0B9yIvuAHG6lBGs1ydbZd1USkxIlJSLIQrVTY\nmOleE59e0VMvkyy9ntckOMKHkl5MCY3gLf3V0f4sEtMdRVzd2Fq/N5MXyw37rOth\n4/MhtPTDRewQjpJESNvaWp5eEvYBKxz0KJp/UKnp+DmqDrYf34Ijjn8/UXSi8xpW\n4Uzz+WahGAwrm6ZNPQ==\n-----END CERTIFICATE-----\n"}'
+volumes:
+  sample_db:
